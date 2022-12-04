@@ -1,0 +1,20 @@
+spring:
+  jpa:
+    show-sql: false
+  datasource:
+    url: jdbc:mysql://localhost:3306/db
+    username: user
+    password: password
+    driverClassName: com.mysql.jdbc.Driver
+  flyway:
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    enabled: false
+api:
+  telegram:
+    bot-token: 5915751985:AAFajuIog7YuLcd5x4Aa1uqdE2zK_-VuW1w
+    support-channel-id: -663486793
+springfox:
+  documentation:
+    swagger-ui:
+      enabled: true
