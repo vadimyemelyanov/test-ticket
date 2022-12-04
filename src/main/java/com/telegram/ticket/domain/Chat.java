@@ -87,12 +87,12 @@ public class Chat {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Chat ticket = (Chat) o;
-        return Objects.equals(uuid, ticket.uuid) && Objects.equals(name, ticket.name) && Objects.equals(product, ticket.product) && Objects.equals(telegramLink, ticket.telegramLink) && Objects.equals(createdAt, ticket.createdAt) && Objects.equals(updatedAt, ticket.updatedAt) && Objects.equals(currentState, ticket.currentState);
+        Chat chat = (Chat) o;
+        return Objects.equals(uuid, chat.uuid) && Objects.equals(name, chat.name) && Objects.equals(product, chat.product) && Objects.equals(telegramLink, chat.telegramLink) && Objects.equals(createdAt, chat.createdAt) && Objects.equals(updatedAt, chat.updatedAt) && currentState == chat.currentState && Objects.equals(authorUsername, chat.authorUsername) && Objects.equals(lastMessage, chat.lastMessage) && Objects.equals(telegramChatId, chat.telegramChatId) && Objects.equals(lastMessageReceivedAt, chat.lastMessageReceivedAt) && Objects.equals(notes, chat.notes) && Objects.equals(stateHistory, chat.stateHistory);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, name, product, telegramLink, createdAt, updatedAt, currentState);
+        return Objects.hash(uuid, name, product, telegramLink, createdAt, updatedAt, currentState, authorUsername, lastMessage, telegramChatId, lastMessageReceivedAt, notes, stateHistory);
     }
 }

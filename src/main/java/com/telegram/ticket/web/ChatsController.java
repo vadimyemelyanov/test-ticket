@@ -29,7 +29,7 @@ public class ChatsController {
     @GetMapping
     public List<Chat> getAllChats(@RequestParam(required = false) String product) {
         log.info("[API] get all chats request");
-        return chatsService.getAllTickets(product);
+        return chatsService.getAllChats(product);
     }
 
     @PutMapping

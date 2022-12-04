@@ -29,7 +29,7 @@ public class ChatsService {
 
 
     @Transactional(readOnly = true)
-    public List<Chat> getAllTickets(String product) {
+    public List<Chat> getAllChats(String product) {
         return getTickets(product);
     }
 
@@ -140,7 +140,7 @@ public class ChatsService {
 
     private List<Chat> getTickets(String product) {
         if (product != null) {
-            return chatsRepository.findAllByProductAndProductIsNull(product);
+            return chatsRepository.findAllByProduct(product);
         }
         return chatsRepository.findAll();
     }
