@@ -89,6 +89,7 @@ public class ChatsService {
     public void updateTicketWithMessage(Chat ticket, Message message) {
         ticket.setLastMessageReceivedAt(LocalDateTime.now());
         ticket.setLastMessage(extractLastMessageText(message));
+        chatsRepository.save(ticket);
         log.info("Ticket updated [{}]", ticket.getUuid());
     }
 
