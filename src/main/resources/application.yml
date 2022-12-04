@@ -12,7 +12,7 @@ spring:
     enabled: true
 api:
   telegram:
-    bot-token: 5915751985:AAHnESPrmfXpA0U5rZStxOYcCi1fCnOv3So
+    bot-token: 5915751985:AAFnc8bT4_iYVI4ILXnJRRqeegCH3vkfgeM
 springfox:
   documentation:
     swagger-ui:
