@@ -1,9 +1,9 @@
 package com.telegram.ticket.web;
 
-import com.telegram.ticket.domain.Chat;
+import com.telegram.ticket.domain.Deal;
 import com.telegram.ticket.dto.MoveTicketRequest;
 import com.telegram.ticket.dto.UpdateChatRequest;
-import com.telegram.ticket.service.ChatsService;
+import com.telegram.ticket.service.DealsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -17,32 +17,32 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/chats")
+@RequestMapping("/api/v1/deals")
 @Slf4j
-public class ChatsController {
-    private final ChatsService chatsService;
+public class DealsController {
+    private final DealsService dealsService;
 
-    public ChatsController(ChatsService chatsService) {
-        this.chatsService = chatsService;
+    public DealsController(DealsService dealsService) {
+        this.dealsService = dealsService;
     }
 
     @GetMapping
-    public List<Chat> getAllChats(@RequestParam(required = false) String product) {
+    public List<Deal> getAllDeals(@RequestParam(required = false) String product) {
         log.info("[API] get all chats request");
-        return chatsService.getAllChats(product);
+        return dealsService.getAllDeals(product);
     }
 
     @PutMapping
-    public void updateChat(@RequestBody UpdateChatRequest request) {
+    public void updateDeal(@RequestBody UpdateChatRequest request) {
         log.info("[API] update chat [{}]", request);
-        chatsService.updateTicket(request);
+        dealsService.updateDeal(request);
     }
 
     @PatchMapping("/{uuid}/move")
-    public void moveTicket(@PathVariable String uuid,
-                           @RequestBody MoveTicketRequest moveTicketRequest) {
+    public void moveDeal(@PathVariable String uuid,
+                         @RequestBody MoveTicketRequest moveTicketRequest) {
         log.info("[API] move ticket [{}] to  [{}]", uuid, moveTicketRequest);
-        chatsService.moveTicketToState(uuid, moveTicketRequest.getTargetState());
+        dealsService.moveDealToState(uuid, moveTicketRequest.getTargetState());
     }
 
 }

@@ -9,8 +9,8 @@ import com.pengrad.telegrambot.request.GetChatAdministrators;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.GetChatAdministratorsResponse;
 import com.pengrad.telegrambot.response.GetChatResponse;
-import com.telegram.ticket.domain.Chat;
-import com.telegram.ticket.service.ChatsService;
+import com.telegram.ticket.domain.Deal;
+import com.telegram.ticket.service.DealsService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -26,13 +26,13 @@ import static com.pengrad.telegrambot.UpdatesListener.CONFIRMED_UPDATES_ALL;
 @Component
 public class TelegramListener {
     private TelegramBot telegramBot;
-    private final ChatsService chatsService;
+    private final DealsService dealsService;
 
     @Value("${api.telegram.bot-token}")
     private String token;
 
-    public TelegramListener(ChatsService chatsService) {
-        this.chatsService = chatsService;
+    public TelegramListener(DealsService dealsService) {
+        this.dealsService = dealsService;
     }
 
     @PostConstruct
@@ -61,8 +61,8 @@ public class TelegramListener {
     }
 
     private void processNewMessageFromChat(Update update) {
-        List<Chat> chats = chatsService.getTicketsByChatId(update.message().chat().id());
-        if (chats.isEmpty()) {
+        List<Deal> deals = dealsService.getTicketsByChatId(update.message().chat().id());
+        if (deals.isEmpty()) {
 
             GetChat chat = new GetChat(update.message().chat().id());
             GetChatAdministrators chatAdministrators = new GetChatAdministrators(update.message().chat().id());
@@ -71,9 +71,9 @@ public class TelegramListener {
             GetChatAdministratorsResponse administratorsResponse = telegramBot.execute(chatAdministrators);
             Optional<ChatMember> adminOfChat = administratorsResponse.administrators().stream().filter(chatMember -> !chatMember.user().isBot()).findFirst();
 
-            chatsService.createTicket(update.message(), chatResponse.chat().inviteLink(), adminOfChat.get().user().username());
-        } else if (chats.size() == 1) {
-            chatsService.updateTicketWithMessage(chats.get(0), update.message());
+            dealsService.createTicket(update.message(), chatResponse.chat().inviteLink(), adminOfChat.get().user().username());
+        } else if (deals.size() == 1) {
+            dealsService.updateTicketWithMessage(deals.get(0), update.message());
         } else
             throw new IllegalStateException("cant have 2 or more in progress tickets for 1 chat");
     }

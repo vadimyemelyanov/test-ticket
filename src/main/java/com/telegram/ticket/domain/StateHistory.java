@@ -31,8 +31,8 @@ public class StateHistory {
     @Column(name = "state")
     @Enumerated(EnumType.STRING)
     private TicketState state;
-    @Column(name = "chat_uuid")
-    private String chatUuid;
+    @Column(name = "deal_uuid")
+    private String dealUuid;
     @Column(name = "from_date")
     private LocalDateTime fromDate;
     @Column(name = "to_date")
@@ -43,11 +43,11 @@ public class StateHistory {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         StateHistory that = (StateHistory) o;
-        return Objects.equals(uuid, that.uuid) && state == that.state && Objects.equals(chatUuid, that.chatUuid) && Objects.equals(fromDate, that.fromDate) && Objects.equals(toDate, that.toDate);
+        return uuid.equals(that.uuid) && state == that.state && dealUuid.equals(that.dealUuid) && Objects.equals(fromDate, that.fromDate) && Objects.equals(toDate, that.toDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, state, chatUuid, fromDate, toDate);
+        return Objects.hash(uuid, state, dealUuid, fromDate, toDate);
     }
 }

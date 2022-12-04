@@ -2,7 +2,7 @@ package com.telegram.ticket.dto;
 
 import com.telegram.ticket.domain.Notes;
 import com.telegram.ticket.domain.StateHistory;
-import com.telegram.ticket.domain.Chat;
+import com.telegram.ticket.domain.Deal;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 import java.util.Set;
 
 /**
- * A DTO for the {@link Chat} entity
+ * A DTO for the {@link Deal} entity
  */
 @Data
 @Builder

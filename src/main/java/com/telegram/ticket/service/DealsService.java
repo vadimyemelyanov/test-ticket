@@ -1,13 +1,13 @@
 package com.telegram.ticket.service;
 
 import com.pengrad.telegrambot.model.Message;
+import com.telegram.ticket.domain.Deal;
 import com.telegram.ticket.domain.StateHistory;
-import com.telegram.ticket.domain.Chat;
 import com.telegram.ticket.dto.TicketState;
 import com.telegram.ticket.dto.UpdateChatRequest;
 import com.telegram.ticket.exceptions.EntityNotFoundException;
 import com.telegram.ticket.repository.StateHistoryRepository;
-import com.telegram.ticket.repository.ChatsRepository;
+import com.telegram.ticket.repository.DealsRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,29 +18,29 @@ import java.util.UUID;
 
 @Service
 @Slf4j
-public class ChatsService {
-    private final ChatsRepository chatsRepository;
+public class DealsService {
+    private final DealsRepository dealsRepository;
     private final StateHistoryRepository stateHistoryRepository;
 
-    public ChatsService(ChatsRepository chatsRepository, StateHistoryRepository stateHistoryRepository) {
-        this.chatsRepository = chatsRepository;
+    public DealsService(DealsRepository dealsRepository, StateHistoryRepository stateHistoryRepository) {
+        this.dealsRepository = dealsRepository;
         this.stateHistoryRepository = stateHistoryRepository;
     }
 
 
     @Transactional(readOnly = true)
-    public List<Chat> getAllChats(String product) {
+    public List<Deal> getAllDeals(String product) {
         return getTickets(product);
     }
 
     @Transactional
-    public void moveTicketToState(String uuid, TicketState targetState) {
-        Chat ticket = chatsRepository.findById(uuid)
+    public void moveDealToState(String uuid, TicketState targetState) {
+        Deal ticket = dealsRepository.findById(uuid)
             .orElseThrow(EntityNotFoundException::new);
 
         stateHistoryRepository.save(StateHistory.builder()
             .state(ticket.getCurrentState())
-            .chatUuid(uuid)
+            .dealUuid(uuid)
             .fromDate(ticket.getUpdatedAt())
             .toDate(LocalDateTime.now())
             .uuid(UUID.randomUUID().toString())
@@ -48,12 +48,12 @@ public class ChatsService {
 
         ticket.setCurrentState(targetState);
         ticket.setUpdatedAt(LocalDateTime.now());
-        chatsRepository.save(ticket);
+        dealsRepository.save(ticket);
     }
 
     @Transactional
-    public void updateTicket(UpdateChatRequest request) {
-        Chat ticket = chatsRepository.findById(request.getTicketUuid().toString())
+    public void updateDeal(UpdateChatRequest request) {
+        Deal ticket = dealsRepository.findById(request.getTicketUuid().toString())
             .orElseThrow(EntityNotFoundException::new);
 
         if (request.getName() != null) {
@@ -63,13 +63,13 @@ public class ChatsService {
             ticket.setProduct(request.getProduct());
         }
 
-        chatsRepository.save(ticket);
+        dealsRepository.save(ticket);
     }
 
     @Transactional
     public void createTicket(Message message, String telegramLink, String username) {
         String messageText = extractLastMessageText(message);
-        Chat ticket = Chat.builder()
+        Deal ticket = Deal.builder()
             .uuid(UUID.randomUUID().toString())
             .name(message.chat().title())
             .authorUsername(username)
@@ -81,15 +81,15 @@ public class ChatsService {
             .updatedAt(LocalDateTime.now())
             .lastMessageReceivedAt(LocalDateTime.now())
             .build();
-        chatsRepository.save(ticket);
+        dealsRepository.save(ticket);
         log.info("Ticket saved [{}]", ticket.getUuid());
     }
 
     @Transactional
-    public void updateTicketWithMessage(Chat ticket, Message message) {
+    public void updateTicketWithMessage(Deal ticket, Message message) {
         ticket.setLastMessageReceivedAt(LocalDateTime.now());
         ticket.setLastMessage(extractLastMessageText(message));
-        chatsRepository.save(ticket);
+        dealsRepository.save(ticket);
         log.info("Ticket updated [{}]", ticket.getUuid());
     }
 
@@ -134,15 +134,15 @@ public class ChatsService {
     }
 
     @Transactional(readOnly = true)
-    public List<Chat> getTicketsByChatId(Long chatId) {
-        return chatsRepository.findAllByChatIdAndCurrentStateNotFinal(chatId);
+    public List<Deal> getTicketsByChatId(Long chatId) {
+        return dealsRepository.findAllByChatIdAndCurrentStateNotFinal(chatId);
     }
 
 
-    private List<Chat> getTickets(String product) {
+    private List<Deal> getTickets(String product) {
         if (product != null) {
-            return chatsRepository.findAllByProduct(product);
+            return dealsRepository.findAllByProduct(product);
         }
-        return chatsRepository.findAll();
+        return dealsRepository.findAllByCurrentState_ClosedIsNot();
     }
 }

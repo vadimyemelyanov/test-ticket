@@ -29,7 +29,7 @@ import java.util.UUID;
 
 @NamedEntityGraphs({
     @NamedEntityGraph(
-        name = "chats-with-notes-and-history",
+        name = "deal-with-notes-and-history",
         attributeNodes = {
             @NamedAttributeNode(value = "notes"),
             @NamedAttributeNode(value = "stateHistory")
@@ -42,8 +42,8 @@ import java.util.UUID;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "chats")
-public class Chat {
+@Table(name = "deals")
+public class Deal {
     @Id
     @Column(name = "uuid")
     private String uuid = "TCT-" + UUID.randomUUID();
@@ -74,12 +74,12 @@ public class Chat {
     private LocalDateTime lastMessageReceivedAt;
 
     @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "chat_uuid")
+    @JoinColumn(name = "deal_uuid")
     @BatchSize(size = 50)
     private Set<Notes> notes = new LinkedHashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JoinColumn(name = "chat_uuid")
+    @JoinColumn(name = "deal_uuid")
     @BatchSize(size = 50)
     private Set<StateHistory> stateHistory = new LinkedHashSet<>();
 
@@ -87,12 +87,12 @@ public class Chat {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Chat chat = (Chat) o;
-        return Objects.equals(uuid, chat.uuid) && Objects.equals(name, chat.name) && Objects.equals(product, chat.product) && Objects.equals(telegramLink, chat.telegramLink) && Objects.equals(createdAt, chat.createdAt) && Objects.equals(updatedAt, chat.updatedAt) && currentState == chat.currentState && Objects.equals(authorUsername, chat.authorUsername) && Objects.equals(lastMessage, chat.lastMessage) && Objects.equals(telegramChatId, chat.telegramChatId) && Objects.equals(lastMessageReceivedAt, chat.lastMessageReceivedAt) && Objects.equals(notes, chat.notes) && Objects.equals(stateHistory, chat.stateHistory);
+        Deal deal = (Deal) o;
+        return uuid.equals(deal.uuid) && Objects.equals(name, deal.name) && Objects.equals(product, deal.product) && Objects.equals(telegramLink, deal.telegramLink) && currentState == deal.currentState && Objects.equals(authorUsername, deal.authorUsername);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, name, product, telegramLink, createdAt, updatedAt, currentState, authorUsername, lastMessage, telegramChatId, lastMessageReceivedAt, notes, stateHistory);
+        return Objects.hash(uuid, name, product, telegramLink, currentState, authorUsername);
     }
 }

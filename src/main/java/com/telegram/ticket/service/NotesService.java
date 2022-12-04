@@ -18,7 +18,7 @@ public class NotesService {
     public void addNoteToChat(AddNoteRequest addNoteRequest) {
         notesRepository.save(Notes.builder()
             .text(addNoteRequest.getText())
-            .chatUuid(addNoteRequest.getChatUuid().toString())
+            .dealUuid(addNoteRequest.getChatUuid().toString())
             .build());
     }
 }

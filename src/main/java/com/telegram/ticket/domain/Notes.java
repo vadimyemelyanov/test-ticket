@@ -23,8 +23,8 @@ public class Notes {
     @Id
     @Column(name = "uuid")
     private String uuid = UUID.randomUUID().toString();
-    @Column(name = "chat_uuid")
-    private String chatUuid;
+    @Column(name = "deal_uuid")
+    private String dealUuid;
     @Column(name = "text")
     private String text;
     @Column(name = "created_at")
