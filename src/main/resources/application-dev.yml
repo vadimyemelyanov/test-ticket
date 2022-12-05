@@ -1,0 +1,19 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: false
+  datasource:
+    url: jdbc:mysql://localhost:3306/lead_booster
+    username: root
+    password: root
+    driverClassName: com.mysql.jdbc.Driver
+  flyway:
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+    enabled: true
+api:
+  telegram:
+    enabled: true
+    bot-token: 5824187988:AAH6IWNJ42MFjl7Ga41-JUgzCsQASaZSzZ8
