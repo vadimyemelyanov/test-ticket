@@ -1,6 +1,6 @@
 package com.alliance.leadbooster.model.enums;
 
-public enum TicketState {
+public enum DealState {
     QUALIFICATION,
     KYC,
     RESEARCH,

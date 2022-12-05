@@ -2,7 +2,7 @@ package com.alliance.leadbooster.service;
 
 import com.alliance.leadbooster.exceptions.EntityNotFoundException;
 import com.alliance.leadbooster.model.UpdateDealRequest;
-import com.alliance.leadbooster.model.enums.TicketState;
+import com.alliance.leadbooster.model.enums.DealState;
 import com.alliance.leadbooster.persistence.entity.Deal;
 import com.alliance.leadbooster.persistence.entity.StateHistory;
 import com.alliance.leadbooster.persistence.repository.DealsRepository;
@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import static com.alliance.leadbooster.model.enums.TicketState.QUALIFICATION;
+import static com.alliance.leadbooster.model.enums.DealState.QUALIFICATION;
 import static java.lang.String.format;
 import static java.util.Optional.ofNullable;
 import static org.apache.logging.log4j.util.Strings.EMPTY;
@@ -40,7 +40,7 @@ public class DealsService {
     }
 
     @Transactional
-    public void moveDealToState(String uuid, TicketState targetState) {
+    public Deal moveDealToState(String uuid, DealState targetState) {
         Deal ticket = findDealRequired(uuid);
 
         stateHistoryRepository.save(StateHistory.builder()
@@ -54,10 +54,10 @@ public class DealsService {
             .currentState(targetState)
             .build();
 
-        save(ticket);
+        return save(ticket);
     }
 
-    public void updateDeal(UpdateDealRequest request) {
+    public Deal updateDeal(UpdateDealRequest request) {
         Deal ticket = findDealRequired(request.getDealUuid());
         HashMap<String, String> changesMap = new HashMap<>();
 
@@ -71,7 +71,7 @@ public class DealsService {
             changesMap.put("product", request.getProduct());
         }
 
-        save(dealBuilder.build());
+        return save(dealBuilder.build());
     }
 
     public void createTicket(Message message, String telegramLink) {
@@ -106,8 +106,8 @@ public class DealsService {
     }
 
     @Transactional
-    public void save(Deal ticket) {
-        dealsRepository.save(ticket);
+    public Deal save(Deal ticket) {
+        return dealsRepository.save(ticket);
     }
 
     public List<Deal> getDealsByChatId(Long chatId) {
@@ -149,6 +149,6 @@ public class DealsService {
 
     private List<Deal> getDeals(String product) {
         return ofNullable(product).map(dealsRepository::findAllByProduct)
-                                  .orElseGet(dealsRepository::findAllByCurrentState_ClosedIsNot);
+                                  .orElseGet(dealsRepository::findAllByCurrentStateIsNotClosed);
     }
 }

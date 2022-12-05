@@ -1,6 +1,6 @@
 package com.alliance.leadbooster.persistence.entity;
 
-import com.alliance.leadbooster.model.enums.TicketState;
+import com.alliance.leadbooster.model.enums.DealState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -69,7 +69,7 @@ public class Deal {
 
     @Column(name = "current_state")
     @Enumerated(EnumType.STRING)
-    private TicketState currentState;
+    private DealState currentState;
 
     @Column(name = "author_username")
     private String authorUsername;
