@@ -6,6 +6,9 @@ import com.telegram.leadbooster.repository.NotesRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.UUID;
+
 @Service
 public class NotesService {
     private final NotesRepository notesRepository;
@@ -15,10 +18,13 @@ public class NotesService {
     }
 
     @Transactional
-    public void addNoteToChat(AddNoteRequest addNoteRequest) {
-        notesRepository.save(Notes.builder()
-            .text(addNoteRequest.getText())
-            .dealUuid(addNoteRequest.getChatUuid().toString())
+    public Notes addNoteToChat(AddNoteRequest addNoteRequest) {
+        return notesRepository.save(Notes.builder()
+            .uuid(UUID.randomUUID().toString())
+            .text(addNoteRequest.getContent())
+            .dealUuid(addNoteRequest.getDealUuid())
+            .createdAt(LocalDateTime.now())
+            .updatedAt(LocalDateTime.now())
             .build());
     }
 }

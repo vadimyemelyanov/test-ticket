@@ -1,7 +1,7 @@
 package com.telegram.leadbooster.web;
 
 import com.telegram.leadbooster.domain.Deal;
-import com.telegram.leadbooster.dto.MoveTicketRequest;
+import com.telegram.leadbooster.dto.MoveDealRequest;
 import com.telegram.leadbooster.dto.UpdateDealRequest;
 import com.telegram.leadbooster.service.DealsService;
 import lombok.extern.slf4j.Slf4j;
@@ -33,16 +33,16 @@ public class DealsController {
     }
 
     @PutMapping
-    public void updateDeal(@RequestBody UpdateDealRequest request) {
+    public Deal updateDeal(@RequestBody UpdateDealRequest request) {
         log.info("[API] update chat [{}]", request);
-        dealsService.updateDeal(request);
+        return dealsService.updateDeal(request);
     }
 
     @PatchMapping("/{uuid}/move")
-    public void moveDeal(@PathVariable String uuid,
-                         @RequestBody MoveTicketRequest moveTicketRequest) {
-        log.info("[API] move ticket [{}] to  [{}]", uuid, moveTicketRequest);
-        dealsService.moveDealToState(uuid, moveTicketRequest.getTargetState());
+    public Deal moveDeal(@PathVariable String uuid,
+                         @RequestBody MoveDealRequest moveDealRequest) {
+        log.info("[API] move ticket [{}] to [{}]", uuid, moveDealRequest);
+        return dealsService.moveDealToState(uuid, moveDealRequest.getTargetState());
     }
 
 }

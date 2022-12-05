@@ -1,5 +1,6 @@
 package com.telegram.leadbooster.dto;
 
+import com.telegram.leadbooster.dto.enums.DealState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,9 +13,7 @@ import org.jetbrains.annotations.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class AddNoteRequest {
+public class MoveDealRequest {
     @NotNull
-    private String dealUuid;
-    @NotNull
-    private String content;
+    private DealState targetState;
 }

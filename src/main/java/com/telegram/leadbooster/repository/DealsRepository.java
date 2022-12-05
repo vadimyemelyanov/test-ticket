@@ -15,15 +15,15 @@ public interface DealsRepository extends JpaRepository<Deal, String> {
         value = "deal-with-notes-and-history",
         type = EntityGraph.EntityGraphType.LOAD
     )
-    @Query(value = "from Deal where (product =:product or product is null) and currentState != 'CLOSED' ")
+    @Query(value = "from Deal where (product =:product or product is null) and currentState <> 'CLOSED' ")
     List<Deal> findAllByProduct(String product);
 
     @EntityGraph(
         value = "deal-with-notes-and-history",
         type = EntityGraph.EntityGraphType.LOAD
     )
-    @Query(value = "from Deal where currentState != 'CLOSED'")
-    List<Deal> findAllByCurrentState_ClosedIsNot();
+    @Query(value = "from Deal where currentState <> 'CLOSED'")
+    List<Deal> findAllByCurrentStateIsNotClosed();
 
 
     @Query(nativeQuery = true, value = "select * from deals where telegram_chat_id = ?1 and current_state not in ('CLOSED', 'COMPLETED')")
