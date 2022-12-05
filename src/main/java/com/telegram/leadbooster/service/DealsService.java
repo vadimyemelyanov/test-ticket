@@ -3,8 +3,8 @@ package com.telegram.leadbooster.service;
 import com.pengrad.telegrambot.model.Message;
 import com.telegram.leadbooster.domain.Deal;
 import com.telegram.leadbooster.domain.StateHistory;
-import com.telegram.leadbooster.dto.enums.TicketState;
 import com.telegram.leadbooster.dto.UpdateDealRequest;
+import com.telegram.leadbooster.dto.enums.DealState;
 import com.telegram.leadbooster.exceptions.EntityNotFoundException;
 import com.telegram.leadbooster.repository.DealsRepository;
 import com.telegram.leadbooster.repository.StateHistoryRepository;
@@ -35,9 +35,13 @@ public class DealsService {
     }
 
     @Transactional
-    public void moveDealToState(String uuid, TicketState targetState) {
+    public Deal moveDealToState(String uuid, DealState targetState) {
         Deal ticket = dealsRepository.findById(uuid)
             .orElseThrow(EntityNotFoundException::new);
+
+        if (targetState == DealState.CLOSED && ticket.getCurrentState() != DealState.COMPLETED) {
+            throw new IllegalStateException(String.format("Can`t close deal from %s state", ticket.getCurrentState()));
+        }
 
         stateHistoryRepository.save(StateHistory.builder()
             .state(ticket.getCurrentState())
@@ -49,11 +53,11 @@ public class DealsService {
 
         ticket.setCurrentState(targetState);
         ticket.setUpdatedAt(LocalDateTime.now());
-        dealsRepository.save(ticket);
+        return dealsRepository.save(ticket);
     }
 
     @Transactional
-    public void updateDeal(UpdateDealRequest request) {
+    public Deal updateDeal(UpdateDealRequest request) {
         Deal ticket = dealsRepository.findById(request.getDealUuid())
             .orElseThrow(EntityNotFoundException::new);
         HashMap<String, String> changesMap = new HashMap<>();
@@ -67,7 +71,7 @@ public class DealsService {
             changesMap.put("product", request.getProduct());
         }
 
-        dealsRepository.save(ticket);
+        return dealsRepository.save(ticket);
     }
 
     @Transactional
@@ -79,7 +83,7 @@ public class DealsService {
             .authorUsername(username)
             .telegramChatId(message.chat().id())
             .telegramLink(telegramLink)
-            .currentState(TicketState.QUALIFICATION)
+            .currentState(DealState.QUALIFICATION)
             .lastMessage(messageText)
             .createdAt(LocalDateTime.now())
             .updatedAt(LocalDateTime.now())
@@ -148,6 +152,6 @@ public class DealsService {
         if (product != null) {
             return dealsRepository.findAllByProduct(product);
         }
-        return dealsRepository.findAllByCurrentState_ClosedIsNot();
+        return dealsRepository.findAllByCurrentStateIsNotClosed();
     }
 }

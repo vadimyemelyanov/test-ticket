@@ -1,6 +1,6 @@
 package com.telegram.leadbooster.dto.enums;
 
-public enum TicketState {
+public enum DealState {
     QUALIFICATION,
     KYC,
     RESEARCH,

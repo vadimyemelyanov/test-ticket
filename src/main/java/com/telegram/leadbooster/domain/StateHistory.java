@@ -1,6 +1,6 @@
 package com.telegram.leadbooster.domain;
 
-import com.telegram.leadbooster.dto.enums.TicketState;
+import com.telegram.leadbooster.dto.enums.DealState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,7 +30,7 @@ public class StateHistory {
     private String uuid = UUID.randomUUID().toString();
     @Column(name = "state")
     @Enumerated(EnumType.STRING)
-    private TicketState state;
+    private DealState state;
     @Column(name = "deal_uuid")
     private String dealUuid;
     @Column(name = "from_date")

@@ -1,6 +1,6 @@
 package com.telegram.leadbooster.domain;
 
-import com.telegram.leadbooster.dto.enums.TicketState;
+import com.telegram.leadbooster.dto.enums.DealState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -59,7 +59,7 @@ public class Deal {
     private LocalDateTime updatedAt;
     @Column(name = "current_state")
     @Enumerated(EnumType.STRING)
-    private TicketState currentState;
+    private DealState currentState;
 
     @Column(name = "author_username")
     private String authorUsername;
