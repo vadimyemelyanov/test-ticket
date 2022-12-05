@@ -24,9 +24,9 @@ public class GeneralConfiguration implements WebMvcConfigurer {
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
-            .groupName("ticket")
+            .groupName("leadbooster")
             .select()
-            .apis(RequestHandlerSelectors.basePackage("com.telegram.ticket"))
+            .apis(RequestHandlerSelectors.basePackage("com.telegram.leadbooster"))
             .apis(RequestHandlerSelectors.any())
             .paths(PathSelectors.any())
             .build();
