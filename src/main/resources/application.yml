@@ -3,11 +3,11 @@ spring:
     properties:
       hibernate:
         format_sql: true
-    show-sql: true
+    show-sql: false
   datasource:
-    url: jdbc:mysql://db-mysql-fra1-46801-do-user-13021607-0.b.db.ondigitalocean.com:25060/defaultdb?ssl-mode=REQUIRED
-    username: doadmin
-    password: AVNS_KSwiCuPa41g7vZ-tf0K
+    url: jdbc:mysql://localhost:3306/lead-booster
+    username: root
+    password: root
     driverClassName: com.mysql.jdbc.Driver
   flyway:
     locations: classpath:db/migration
@@ -15,6 +15,7 @@ spring:
     enabled: true
 api:
   telegram:
+    enabled: false
     bot-token: 5915751985:AAFnc8bT4_iYVI4ILXnJRRqeegCH3vkfgeM
 springfox:
   documentation:
