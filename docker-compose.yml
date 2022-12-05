@@ -1,0 +1,15 @@
+version: '3'
+services:
+  redis:
+    image: redis:4.0.5-alpine
+    ports:
+      - "6379:6379"
+  mysql:
+    restart: always
+    image: arm64v8/mysql #Mac M1 fix
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_ROOT_HOST=%
+      - MYSQL_DATABASE=lead-booster
+    ports:
+      - "3306:3306"
