@@ -16,4 +16,4 @@ spring:
 api:
   telegram:
     enabled: true
-    bot-token: 5824187988:AAH6IWNJ42MFjl7Ga41-JUgzCsQASaZSzZ8
+    bot-token: 5915751985:AAFnc8bT4_iYVI4ILXnJRRqeegCH3vkfgeM
