@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,8 +34,14 @@ public class DealsService {
     private final StateHistoryRepository stateHistoryRepository;
 
 
+    @Transactional(readOnly = true)
     public List<Deal> getAllDeals(String product) {
         return getDeals(product);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Deal> getDealsByChatId(Long chatId) {
+        return dealsRepository.findAllByChatIdAndCurrentStateNotFinal(chatId);
     }
 
     @Transactional
@@ -54,26 +59,25 @@ public class DealsService {
             .currentState(targetState)
             .build();
 
-        return save(ticket);
+        return dealsRepository.save(ticket);
     }
 
+    @Transactional
     public Deal updateDeal(UpdateDealRequest request) {
         Deal ticket = findDealRequired(request.getDealUuid());
-        HashMap<String, String> changesMap = new HashMap<>();
 
         final Deal.DealBuilder dealBuilder = ticket.toBuilder();
         if (request.getName() != null) {
             dealBuilder.name(request.getName());
-            changesMap.put("name", request.getName());
         }
         if (request.getProduct() != null) {
             dealBuilder.product(request.getProduct());
-            changesMap.put("product", request.getProduct());
         }
 
-        return save(dealBuilder.build());
+        return dealsRepository.save(dealBuilder.build());
     }
 
+    @Transactional
     public void createTicket(Message message, String telegramLink) {
         String messageText = extractLastMessageText(message);
         String username2 = extractUsername(message);
@@ -88,10 +92,11 @@ public class DealsService {
             .lastMessageReceivedAt(LocalDateTime.now())
             .build();
 
-        save(ticket);
+        dealsRepository.save(ticket);
         log.info("Ticket saved [{}]", ticket.getUuid());
     }
 
+    @Transactional
     public void updateDealWithMessage(Deal ticket, Message message) {
         String lastMessage = extractLastMessageText(message);
         final String username = extractUsername(message);
@@ -101,17 +106,8 @@ public class DealsService {
             .lastMessage(lastMessage)
             .build();
 
-        save(ticket);
+        dealsRepository.save(ticket);
         log.info("Ticket updated [{}]", ticket.getUuid());
-    }
-
-    @Transactional
-    public Deal save(Deal ticket) {
-        return dealsRepository.save(ticket);
-    }
-
-    public List<Deal> getDealsByChatId(Long chatId) {
-        return dealsRepository.findAllByChatIdAndCurrentStateNotFinal(chatId);
     }
 
     private String extractUsername(Message message) {
