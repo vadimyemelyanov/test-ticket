@@ -20,6 +20,7 @@
         <java-telegram-bot-api.version>6.2.0</java-telegram-bot-api.version>
         <spring-cloud-starter-openfeign.version>3.1.4</spring-cloud-starter-openfeign.version>
 
+        <maven.test.skip>true</maven.test.skip>
     </properties>
     <dependencies>
         <!-- spring -->
