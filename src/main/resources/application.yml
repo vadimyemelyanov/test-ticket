@@ -13,9 +13,9 @@ spring:
         format_sql: true
     show-sql: false
   datasource:
-    url: ${DB_URL}
+    url: jdbc:mysql://doadmin:AVNS_7TZEJ3IOo6rZN0c908o@my-db-leads-do-user-13021607-0.b.db.ondigitalocean.com:25060/defaultdb?ssl-mode=REQUIRED
     username: doadmin
-    password: ${DB_PASSWORD}
+    password: AVNS_7TZEJ3IOo6rZN0c908o
     driverClassName: com.mysql.jdbc.Driver
   flyway:
     locations: classpath:db/migration
@@ -24,4 +24,4 @@ spring:
 api:
   telegram:
     enabled: true
-    bot-token: ${BOT_TOKEN}
+    bot-token: 5915751985:AAFnc8bT4_iYVI4ILXnJRRqeegCH3vkfgeM
