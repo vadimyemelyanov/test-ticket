@@ -113,8 +113,8 @@ public class DealsService {
     private String extractUsername(Message message) {
         final User user = message.from();
         return isEmpty(user.username())
-               ? format("%s %s", user.firstName(), user.lastName())
-               : user.username();
+            ? format("%s %s", user.firstName(), user.lastName())
+            : user.username();
     }
 
     private String extractLastMessageText(Message message) {
@@ -124,7 +124,7 @@ public class DealsService {
             return "Audio";
         if (message.document() != null)
             return "Document " + message.document()
-                                        .mimeType();
+                .mimeType();
         if (message.video() != null)
             return "Video";
         if (message.photo() != null)
