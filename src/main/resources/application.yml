@@ -1,5 +1,5 @@
 server:
-  port: 9090
+  port: 8080
 
 springfox:
   documentation:
@@ -24,4 +24,4 @@ spring:
 api:
   telegram:
     enabled: true
-    bot-token: 5915751985:AAFnc8bT4_iYVI4ILXnJRRqeegCH3vkfgeM
+    bot-token: 5915751985:AAG9jYCqaQ7_bfLQR4C06Wf8kCQ0ZkDrpS0
