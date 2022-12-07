@@ -5,6 +5,7 @@ import com.alliance.leadbooster.model.UpdateDealRequest;
 import com.alliance.leadbooster.persistence.repository.DealsRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
+@Disabled
 public class DealControllerIntTest {
     private static final String DEAL_UUID = "f596c437-f529-4128-8707-4553ef80c2c0";
     @Autowired

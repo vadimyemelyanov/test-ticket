@@ -58,3 +58,11 @@ create table state_history
         foreign key (deal_uuid) references deals (uuid)
 );
 
+create table state_dictionary
+(
+    name             varchar(256) not null primary key,
+    title            text,
+    position         int          not null,
+    days_to_complete int          not null,
+    color            varchar(20)
+);

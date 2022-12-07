@@ -1,9 +1,10 @@
 package com.alliance.leadbooster.web;
 
+import com.alliance.leadbooster.model.DealResponseDto;
 import com.alliance.leadbooster.model.MoveDealRequest;
 import com.alliance.leadbooster.model.UpdateDealRequest;
-import com.alliance.leadbooster.persistence.entity.Deal;
 import com.alliance.leadbooster.service.DealsService;
+import com.alliance.leadbooster.utils.DealMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -27,22 +29,25 @@ public class DealsController {
 
 
     @GetMapping
-    public List<Deal> getAllDeals(@RequestParam(required = false) String product) {
+    public List<DealResponseDto> getAllDeals(@RequestParam(required = false) String product) {
         log.info("[API] get all chats request");
-        return dealsService.getAllDeals(product);
+        return dealsService.getAllDeals(product)
+            .stream()
+            .map(DealMapper::mapToDto)
+            .collect(Collectors.toList());
     }
 
     @PutMapping
-    public Deal updateDeal(@RequestBody UpdateDealRequest request) {
+    public DealResponseDto updateDeal(@RequestBody UpdateDealRequest request) {
         log.info("[API] update chat [{}]", request);
-        return dealsService.updateDeal(request);
+        return DealMapper.mapToDto(dealsService.updateDeal(request));
     }
 
     @PatchMapping("/{uuid}/move")
-    public Deal moveDeal(@PathVariable String uuid,
-                         @RequestBody MoveDealRequest moveDealRequest) {
+    public DealResponseDto moveDeal(@PathVariable String uuid,
+                                    @RequestBody MoveDealRequest moveDealRequest) {
         log.info("[API] move ticket [{}] to [{}]", uuid, moveDealRequest);
-        return dealsService.moveDealToState(uuid, moveDealRequest.getTargetState());
+        return DealMapper.mapToDto(dealsService.moveDealToState(uuid, moveDealRequest.getTargetState()));
     }
 
 }
