@@ -3,7 +3,6 @@ package com.alliance.leadbooster.persistence.entity;
 import com.alliance.leadbooster.model.enums.DealState;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.BatchSize;
@@ -25,6 +24,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -42,7 +42,6 @@ import java.util.UUID;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 @Table(name = "deals")
 public class Deal {
 
@@ -83,7 +82,7 @@ public class Deal {
     @Column(name = "last_message_received_at")
     private LocalDateTime lastMessageReceivedAt;
 
-    @OneToMany(orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JoinColumn(name = "deal_uuid")
     @BatchSize(size = 50)
     private Set<Notes> notes = new LinkedHashSet<>();
@@ -93,4 +92,22 @@ public class Deal {
     @BatchSize(size = 50)
     private Set<StateHistory> stateHistory = new LinkedHashSet<>();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Deal deal = (Deal) o;
+        return Objects.equals(uuid, deal.uuid) && Objects.equals(name, deal.name)
+            && Objects.equals(product, deal.product)
+            && Objects.equals(telegramLink, deal.telegramLink)
+            && currentState == deal.currentState
+            && Objects.equals(authorUsername, deal.authorUsername)
+            && Objects.equals(lastMessage, deal.lastMessage)
+            && Objects.equals(telegramChatId, deal.telegramChatId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uuid, name, product, telegramLink, currentState, authorUsername, lastMessage, telegramChatId);
+    }
 }

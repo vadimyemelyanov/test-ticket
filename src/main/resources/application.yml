@@ -1,27 +1,7 @@
 server:
-  port: 8080
+  port: 9090
 
 springfox:
   documentation:
     swagger-ui:
       enabled: true
-
-spring:
-  jpa:
-    properties:
-      hibernate:
-        format_sql: true
-    show-sql: false
-  datasource:
-    url: jdbc:mysql://doadmin:AVNS_7TZEJ3IOo6rZN0c908o@my-db-leads-do-user-13021607-0.b.db.ondigitalocean.com:25060/defaultdb?ssl-mode=REQUIRED
-    username: doadmin
-    password: AVNS_7TZEJ3IOo6rZN0c908o
-    driverClassName: com.mysql.jdbc.Driver
-  flyway:
-    locations: classpath:db/migration
-    baseline-on-migrate: true
-    enabled: true
-api:
-  telegram:
-    enabled: true
-    bot-token: 5915751985:AAG9jYCqaQ7_bfLQR4C06Wf8kCQ0ZkDrpS0

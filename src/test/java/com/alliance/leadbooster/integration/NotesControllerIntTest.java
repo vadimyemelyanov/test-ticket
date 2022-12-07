@@ -1,9 +1,11 @@
 package com.alliance.leadbooster.integration;
 
 import com.alliance.leadbooster.model.AddNoteRequest;
+import com.alliance.leadbooster.persistence.entity.Deal;
+import com.alliance.leadbooster.persistence.entity.StateHistory;
+import com.alliance.leadbooster.persistence.repository.DealsRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -13,6 +15,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.Set;
+
+import static com.alliance.leadbooster.model.enums.DealState.KYC;
+import static com.alliance.leadbooster.model.enums.DealState.QUALIFICATION;
+import static com.alliance.leadbooster.utils.TestUtils.generateDeal;
+import static com.alliance.leadbooster.utils.TestUtils.generateStateHistory;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -25,13 +33,19 @@ public class NotesControllerIntTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
+    @Autowired
+    private DealsRepository dealsRepository;
 
     @SneakyThrows
     @Test
-    @Disabled
     public void shouldSuccessfullyAddNewNote() {
         //given
+        StateHistory stateHistory = generateStateHistory(DEAL_UUID, KYC);
+        Deal deal = generateDeal(DEAL_UUID, QUALIFICATION, null, Set.of(stateHistory));
+
+        dealsRepository.save(deal);
+
         AddNoteRequest addNoteRequest = AddNoteRequest
             .builder().dealUuid(DEAL_UUID)
             .content("He is a tester").build();
@@ -44,8 +58,6 @@ public class NotesControllerIntTest {
             //then
             .andExpect(status().isOk())
             .andExpect(content().string(containsString("He is a tester")));
-
-
     }
 
 
