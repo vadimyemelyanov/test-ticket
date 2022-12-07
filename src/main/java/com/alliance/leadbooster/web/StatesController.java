@@ -28,7 +28,7 @@ public class StatesController {
 
     @PutMapping
     public StateDictionary updateStateDictionaryItem(@RequestBody UpdateStateRequest request) {
-        log.debug("[API] get all states request");
+        log.debug("[API] update state dictionary with [{}]", request);
         return statesService.updateStateDictionaryItem(request);
     }
 }
