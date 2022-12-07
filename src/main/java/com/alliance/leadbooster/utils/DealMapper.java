@@ -11,7 +11,7 @@ public class DealMapper {
             .name(deal.getName())
             .product(deal.getProduct())
             .telegramLink(deal.getTelegramLink())
-            .currentState(DealResponseDto.CurrentState.builder()
+            .ticket(DealResponseDto.Ticket.builder()
                 .dealUuid(deal.getUuid())
                 .lastMessage(deal.getLastMessage())
                 .state(deal.getCurrentState())

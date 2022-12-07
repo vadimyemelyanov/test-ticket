@@ -20,7 +20,7 @@ public class DealResponseDto implements Serializable {
     private final String name;
     private final String product;
     private final String telegramLink;
-    private final CurrentState currentState;
+    private final Ticket ticket;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
     private final Set<Notes> notes;
@@ -28,7 +28,7 @@ public class DealResponseDto implements Serializable {
 
     @Data
     @Builder
-    public static class CurrentState implements Serializable {
+    public static class Ticket implements Serializable {
         private final String dealUuid;
         private final DealState state;
         private final String authorUsername;
